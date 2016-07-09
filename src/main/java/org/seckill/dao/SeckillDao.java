@@ -14,7 +14,7 @@ import org.seckill.entity.Seckill;
  * @author cheng
  * @version Id: SeckillDao.java, v 0.1 2016/7/5 23:54 cheng Exp $$
  */
-interface SeckillDao {
+public interface SeckillDao {
 
     /**
      * 减库存

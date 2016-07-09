@@ -3,20 +3,19 @@ package org.seckill.dao;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.junit.Test;
+import org.seckill.base.BaseSpringTest;
 import org.seckill.entity.Seckill;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * Created by cheng on 2016/7/6.
  */
-
 public class SeckillDaoTest extends BaseSpringTest {
 
     //注入Dao实现类依赖
-    @Resource
+    @Autowired
     private SeckillDao seckillDao;
 
     @Test

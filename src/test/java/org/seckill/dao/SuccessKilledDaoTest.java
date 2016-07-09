@@ -1,16 +1,16 @@
 package org.seckill.dao;
 
-import javax.annotation.Resource;
-
 import org.junit.Test;
+import org.seckill.base.BaseSpringTest;
 import org.seckill.entity.SuccessKilled;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by cheng on 2016/7/6.
  */
 public class SuccessKilledDaoTest extends BaseSpringTest {
 
-    @Resource
+    @Autowired
     private SuccessKilledDao successKilledDao;
 
     @Test
