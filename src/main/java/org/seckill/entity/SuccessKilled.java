@@ -4,13 +4,14 @@
  */
 package org.seckill.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author cheng
  * @version Id: SuccessKilled.java, v 0.1 2016/7/5 23:51 cheng Exp $$
  */
-public class SuccessKilled {
+public class SuccessKilled implements Serializable{
     /**
      * 秒杀商品id
      */

@@ -35,7 +35,7 @@
         <!--注入数据库连接池-->
         <property name="dataSource" ref="dateSource"/>
         <!--配置mybatis全局配置文件：mybatis-config.xml-->
-        <property name="configLocation" value="mybatis-config.xml"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
         <!--扫描entity包(可以配多个包) 使用别名org.seckill.entity.Seckill->Seckill-->
         <property name="typeAliasesPackage" value="org.seckill.entity"/>
         <!--扫描sql配置文件：mapper需要的xml文件-->

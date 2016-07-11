@@ -10,9 +10,9 @@
         <id column="seckill_id" property="seckillId" jdbcType="BIGINT"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="number" property="number" jdbcType="INTEGER"/>
-        <result column="start_time" property="startDate" jdbcType="TIMESTAMP"/>
-        <result column="end_time" property="endDate" jdbcType="TIMESTAMP"/>
-        <result column="create_time" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <!--目的：为DAO接口方法提供sql语句配置-->
     <update id="reduceNumber">

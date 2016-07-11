@@ -4,13 +4,14 @@
  */
 package org.seckill.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author cheng
  * @version Id: Seckill.java, v 0.1 2016/7/5 23:43 cheng Exp $$
  */
-public class Seckill {
+public class Seckill implements Serializable{
     /**
      * 秒杀ID
      */
@@ -26,27 +27,27 @@ public class Seckill {
     /**
      *秒杀开始时间
      */
-    private Date   startDate;
+    private Date   startTime;
     /**
      *秒杀结束时间
      */
-    private Date   endDate;
+    private Date   endTime;
     /**
      * 创建时间
      */
-    private Date   createDate;
+    private Date   createTime;
 
     public Seckill() {
     }
 
-    public Seckill(long seckillId, String name, int number, Date endDate, Date startDate,
-                   Date createDate) {
+    public Seckill(long seckillId, String name, int number, Date endTime, Date startTime,
+                   Date createTime) {
         this.seckillId = seckillId;
         this.name = name;
         this.number = number;
-        this.endDate = endDate;
-        this.startDate = startDate;
-        this.createDate = createDate;
+        this.endTime = endTime;
+        this.startTime = startTime;
+        this.createTime = createTime;
     }
 
     public String getName() {
@@ -65,28 +66,28 @@ public class Seckill {
         this.number = number;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setEndTime(Date endDate) {
+        this.endTime = endDate;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public long getSeckillId() {
@@ -100,7 +101,7 @@ public class Seckill {
     @Override
     public String toString() {
         return "Seckill{" + "seckillId=" + seckillId + ", name='" + name + '\'' + ", number="
-               + number + ", startDate=" + startDate + ", endDate=" + endDate + ", createDate="
-               + createDate + '}';
+               + number + ", startDate=" + startTime + ", endDate=" + endTime + ", createDate="
+               + createTime + '}';
     }
 }

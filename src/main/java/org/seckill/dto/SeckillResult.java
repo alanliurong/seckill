@@ -13,9 +13,9 @@ public class SeckillResult<T> {
 
     private boolean success;
 
-    private T date;
+    private T       date;
 
-    private String error;
+    private String  error;
 
     public SeckillResult(boolean success, T date) {
         this.success = success;

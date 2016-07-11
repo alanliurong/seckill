@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
  * @version Id: SeckillController.java, v 0.1 2016/7/10 11:09 cheng Exp $$
  */
 @Controller
-@RequestMapping("/seckill") //url:/模块/资源/{id}/细分
+@RequestMapping(value = "/seckill") //url:/模块/资源/{id}/细分
 public class SeckillController {
     private Logger         log = LoggerFactory.getLogger(this.getClass());
 
@@ -40,7 +40,7 @@ public class SeckillController {
      * @param model
      * @return
      */
-    @RequestMapping(name = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
         //获取列表页
         List<Seckill> list = seckillService.getSeckillList();
@@ -54,7 +54,7 @@ public class SeckillController {
      * @param model
      * @return
      */
-    @RequestMapping(name = "/{seckillId}/detail", method = RequestMethod.GET)
+    @RequestMapping(value = "/{seckillId}/detail", method = RequestMethod.GET)
     public String detail(@PathVariable("seckillId") Long seckillId, Model model) {
         if (seckillId == null) {
             return "redirect:/seckill/list";
@@ -72,7 +72,7 @@ public class SeckillController {
      * @param seckillId
      * @return
      */
-    @RequestMapping(name = "/{seckillId}/exposer", method = RequestMethod.GET, produces = { "application/json:charset=UTF-8" })
+    @RequestMapping(value = "/{seckillId}/exposer", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
     @ResponseBody
     public SeckillResult<Exposer> exposer(@PathVariable("seckillId") Long seckillId) {
         SeckillResult<Exposer> result;
@@ -93,39 +93,41 @@ public class SeckillController {
      * @param md5
      * @return
      */
-    @RequestMapping(name = "/{seckillId}/{md5}/execution", method = RequestMethod.POST, produces = { "application/json:charset=UTF-8" })
+    @RequestMapping(value = "/{seckillId}/{md5}/execution", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
     public SeckillResult<SeckillExecution> execute(@PathVariable("seckillId") Long seckillId,
-                                                   @CookieValue(value = "killPhone",required = false) Long phone,
+                                                   @CookieValue(value = "killPhone", required = false) Long phone,
                                                    @PathVariable("md5") String md5) {
         //可以使用 spingMVC valid
-        if (phone == null){
-            return new SeckillResult<SeckillExecution>(false,"未注册");
+        if (phone == null) {
+            return new SeckillResult<SeckillExecution>(false, "未注册");
         }
         SeckillResult<SeckillExecution> result;
 
         try {
-            SeckillExecution execution = seckillService.executeSeckill(seckillId,phone,md5);
-            return new SeckillResult<SeckillExecution>(true,execution);
-        }catch (RepeatKillException e) {
-            log.error(e.getMessage(),e);
-            SeckillExecution execution =  new SeckillExecution(seckillId, SeckillStatEnum.REPEAT_KILL);
-            result = new SeckillResult<SeckillExecution>(false,execution);
-        }catch (SeckillCloseException e) {
-            log.error(e.getMessage(),e);
-            SeckillExecution execution =  new SeckillExecution(seckillId, SeckillStatEnum.END);
-            result = new SeckillResult<SeckillExecution>(false,execution);
+            SeckillExecution execution = seckillService.executeSeckill(seckillId, phone, md5);
+            return new SeckillResult<SeckillExecution>(true, execution);
+        } catch (RepeatKillException e) {
+            log.error(e.getMessage(), e);
+            SeckillExecution execution = new SeckillExecution(seckillId,
+                SeckillStatEnum.REPEAT_KILL);
+            result = new SeckillResult<SeckillExecution>(false, execution);
+        } catch (SeckillCloseException e) {
+            log.error(e.getMessage(), e);
+            SeckillExecution execution = new SeckillExecution(seckillId, SeckillStatEnum.END);
+            result = new SeckillResult<SeckillExecution>(false, execution);
         } catch (SeckillException e) {
-            log.error(e.getMessage(),e);
-            SeckillExecution execution =  new SeckillExecution(seckillId, SeckillStatEnum.INNER_ERROR);
-            result = new SeckillResult<SeckillExecution>(false,execution);
+            log.error(e.getMessage(), e);
+            SeckillExecution execution = new SeckillExecution(seckillId,
+                SeckillStatEnum.INNER_ERROR);
+            result = new SeckillResult<SeckillExecution>(false, execution);
         }
         return result;
     }
 
-    @RequestMapping(value = "/time/now",method = RequestMethod.GET)
-    public SeckillResult<Long> time(){
+    @RequestMapping(value = "/time/now", method = RequestMethod.GET)
+    public SeckillResult<Long> time() {
         Date now = new Date();
-        return new SeckillResult<Long>(true,now.getTime());
+        return new SeckillResult<Long>(true, now.getTime());
     }
 
 }
