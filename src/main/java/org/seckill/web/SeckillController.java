@@ -94,6 +94,7 @@ public class SeckillController {
      * @return
      */
     @RequestMapping(value = "/{seckillId}/{md5}/execution", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
+    @ResponseBody
     public SeckillResult<SeckillExecution> execute(@PathVariable("seckillId") Long seckillId,
                                                    @CookieValue(value = "killPhone", required = false) Long phone,
                                                    @PathVariable("md5") String md5) {
@@ -101,7 +102,6 @@ public class SeckillController {
         if (phone == null) {
             return new SeckillResult<SeckillExecution>(false, "未注册");
         }
-        SeckillResult<SeckillExecution> result;
 
         try {
             SeckillExecution execution = seckillService.executeSeckill(seckillId, phone, md5);
@@ -110,18 +110,17 @@ public class SeckillController {
             log.error(e.getMessage(), e);
             SeckillExecution execution = new SeckillExecution(seckillId,
                 SeckillStatEnum.REPEAT_KILL);
-            result = new SeckillResult<SeckillExecution>(false, execution);
+            return new SeckillResult<SeckillExecution>(true, execution);
         } catch (SeckillCloseException e) {
             log.error(e.getMessage(), e);
             SeckillExecution execution = new SeckillExecution(seckillId, SeckillStatEnum.END);
-            result = new SeckillResult<SeckillExecution>(false, execution);
+            return new SeckillResult<SeckillExecution>(true, execution);
         } catch (SeckillException e) {
             log.error(e.getMessage(), e);
             SeckillExecution execution = new SeckillExecution(seckillId,
                 SeckillStatEnum.INNER_ERROR);
-            result = new SeckillResult<SeckillExecution>(false, execution);
+            return new SeckillResult<SeckillExecution>(true, execution);
         }
-        return result;
     }
 
     @RequestMapping(value = "/time/now", method = RequestMethod.GET, produces = { "application/json;charset=utf-8" })
