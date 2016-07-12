@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.seckill.dao.SeckillDao;
 import org.seckill.dao.SuccessKilledDao;
+import org.seckill.dao.cache.RedisDao;
 import org.seckill.dto.Exposer;
 import org.seckill.dto.SeckillExecution;
 import org.seckill.entity.Seckill;
@@ -37,6 +38,8 @@ public class SeckillServiceImpl implements SeckillService {
     private SeckillDao          seckillDao;
     @Autowired
     private SuccessKilledDao    successKilledDao;
+    @Autowired
+    private RedisDao            redisDao;
 
     //md5颜值字符串，用于混淆
     private final String        slat = "asdfghjkl20160709!@#$%^&*()_+";
@@ -56,10 +59,20 @@ public class SeckillServiceImpl implements SeckillService {
     }
 
     public Exposer exportSeckillUrl(long seckillId) {
-        Seckill seckill = seckillDao.queryById(seckillId);
+        //优化点：缓存优化 //TODO
+        //1：访问redis
+        Seckill seckill = redisDao.getSeckill(seckillId);
         if (seckill == null) {
-            return new Exposer(false, seckillId);
+            //2：访问数据库
+            seckill = seckillDao.queryById(seckillId);
+            if (seckill == null) {
+                return new Exposer(false, seckillId);
+            } else {
+                //3：放入redis
+                redisDao.putSeckill(seckill);
+            }
         }
+
         Date startTime = seckill.getStartTime();
         Date endTime = seckill.getEndTime();
         Date nowTime = new Date();
@@ -72,13 +85,14 @@ public class SeckillServiceImpl implements SeckillService {
         return new Exposer(true, md5, seckillId);
     }
 
-    @Transactional
+
     /**
      * 使用注解控制事务方法的优点
      * 1：开发团队达成一致约定，明确 标注事务方法的编程风格
      * 2：保证事务方法的执行时间尽可能的短，不要穿插其他网络操作RPC/HTTP请求或剥离到事务方法外部
      * 3：不是所有方法都需要事务，如只有一条修改操作，只读不需要事务
      */
+    @Transactional
     public SeckillExecution executeSeckill(long seckillId, long userPhone,
                                            String md5) throws SeckillException, RepeatKillException,
                                                        SeckillCloseException {
@@ -89,25 +103,27 @@ public class SeckillServiceImpl implements SeckillService {
         //执行秒杀逻辑：减库存+记录购买行为
         Date killTime = new Date();
         try {
-            int updateCount = seckillDao.reduceNumber(seckillId, killTime);
-            if (updateCount <= 0) {
-                //没有更新到记录,秒杀结束
-                throw new SeckillCloseException("seckill is close");
-
+            //记录购买行为
+            int insertCount = successKilledDao.insertSuccessKilled(seckillId, userPhone);
+            //唯一：seckillId,userPhone
+            if (insertCount <= 0) {
+                //重复秒杀
+                throw new RepeatKillException("seckill repeated");
             } else {
-                //记录购买行为
-                int insertCount = successKilledDao.insertSuccessKilled(seckillId, userPhone);
-                //唯一：seckillId,userPhone
-                if (insertCount <= 0) {
-                    //重复秒杀
-                    throw new RepeatKillException("seckill repeated");
+                //减库存
+                int updateCount = seckillDao.reduceNumber(seckillId, killTime);
+                if (updateCount <= 0) {
+                    //没有更新到记录,秒杀结束 rollback
+                    throw new SeckillCloseException("seckill is close");
                 } else {
-                    //秒杀成功
+                    //秒杀成功 commit
                     SuccessKilled successKilled = successKilledDao.queryByIdWithSeckill(seckillId,
                         userPhone);
                     return new SeckillExecution(seckillId, successKilled, SeckillStatEnum.SUCCESS);
                 }
+
             }
+
         } catch (SeckillCloseException e1) {
             throw e1;
         } catch (RepeatKillException e2) {
