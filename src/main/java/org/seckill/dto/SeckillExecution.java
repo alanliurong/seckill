@@ -7,13 +7,15 @@ package org.seckill.dto;
 import org.seckill.entity.SuccessKilled;
 import org.seckill.enums.SeckillStatEnum;
 
+import java.io.Serializable;
+
 /**
  * 封装秒杀执行后结果
  *
  * @author cheng
  * @version Id: SeckillExecution.java, v 0.1 2016/7/9 15:59 cheng Exp $$
  */
-public class SeckillExecution {
+public class SeckillExecution implements Serializable{
 
     private long          seckillId;
 

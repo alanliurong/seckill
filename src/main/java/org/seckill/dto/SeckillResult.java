@@ -4,12 +4,14 @@
  */
 package org.seckill.dto;
 
+import java.io.Serializable;
+
 /**
  *  所有ajax请求返回的数据 封装json结果
  * @author cheng
  * @version Id: SeckillResult.java, v 0.1 2016/7/10 11:30 cheng Exp $$
  */
-public class SeckillResult<T> {
+public class SeckillResult<T> implements Serializable{
 
     private boolean success;
 
