@@ -4,22 +4,22 @@
  */
 package org.seckill.util;
 
-//import org.apache.zookeeper.WatchedEvent;
-//import org.apache.zookeeper.Watcher;
-//import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooKeeper;
 
 /**
  * @author cheng
  * @version Id: CreateSession.java, v 0.1 2016/8/31 9:21 cheng Exp $$
  */
-public class CreateSession /**implements */ {
-/**
+public class CreateSession implements Watcher {
+
     private static ZooKeeper zooKeeper;
 
     public static void main(String[] args) throws Exception {
         zooKeeper = new ZooKeeper("192.168.93.130:2181", 5000, new CreateSession());
         System.out.println(zooKeeper.getState());
-//        Thread.sleep(Integer.MAX_VALUE);
+        //        Thread.sleep(Integer.MAX_VALUE);
     }
 
     public void doSomething() {
@@ -31,5 +31,6 @@ public class CreateSession /**implements */ {
         if (event.getState() == Event.KeeperState.SyncConnected) {
             doSomething();
         }
-    }*/
+    }
+
 }
