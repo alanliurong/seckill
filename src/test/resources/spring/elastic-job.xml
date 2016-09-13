@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:reg="http://www.dangdang.com/schema/ddframe/reg"
+       xmlns:job="http://www.dangdang.com/schema/ddframe/job"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.dangdang.com/schema/ddframe/reg
+                        http://www.dangdang.com/schema/ddframe/reg/reg.xsd
+                        http://www.dangdang.com/schema/ddframe/job
+                        http://www.dangdang.com/schema/ddframe/job/job.xsd">
+
+
+    <!--配置作业注册中心 -->
+    <reg:zookeeper id="regCenter" server-lists="${serverLists}"
+                   namespace="${namespace}"
+                   base-sleep-time-milliseconds="${baseSleepTimeMilliseconds}"
+                   max-sleep-time-milliseconds="${maxSleepTimeMilliseconds}" max-retries="${maxRetries}"/>
+
+    <!-- 配置简单作业-->
+    <job:simple id="simpleElasticJob-1.1.1" class="org.seckill.util.MyElasticJob" registry-center-ref="regCenter"
+                cron="${simpleJob.cron}" sharding-total-count="${simpleJob.shardingTotalCount}"
+                sharding-item-parameters="${simpleJob.shardingItemParameters}"
+                monitor-execution="${simpleJob.monitorExecution}"
+                monitor-port="${simpleJob.monitorPort}"
+                failover="${simpleJob.failover}" description="${simpleJob.description}"
+                disabled="${simpleJob.disabled}"
+                overwrite="${simpleJob.overwrite}"/>
+
+    <!-- 配置数据流作业-->
+    <job:dataflow id="throughputDataFlow" class="org.seckill.util.MyThroughputDataFlowElasticJob" registry-center-ref="regCenter"
+                  cron="0/10 * * * * ?" sharding-total-count="3" sharding-item-parameters="0=A,1=B,2=C"
+                  process-count-interval-seconds="10" concurrent-data-process-thread-count="10"/>
+
+    <!-- 配置脚本作业-->
+    <!--<job:script id="scriptElasticJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="3"-->
+                <!--sharding-item-parameters="0=A,1=B,2=C" script-command-line="/your/file/path/demo.sh"/>-->
+
+    <!-- 配置带监听的简单作业-->
+    <job:simple id="listenerElasticJob" class="xxx.MySimpleListenerElasticJob" registry-center-ref="regCenter"
+                cron="0/10 * * * * ?" sharding-total-count="3" sharding-item-parameters="0=A,1=B,2=C">
+        <job:listener class="xx.MySimpleJobListener"/>
+        <job:listener class="xx.MyOnceSimpleJobListener" started-timeout-milliseconds="1000"
+                      completed-timeout-milliseconds="2000"/>
+    </job:simple>
+</beans>

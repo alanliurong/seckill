@@ -12,7 +12,9 @@
 
     <import resource="classpath:spring/spring-datasource.xml"/>
     <import resource="classpath:spring/spring-redis.xml"/>
-    <import resource="classpath:spring/spring-elasticJob.xml"/>
+    <import resource="classpath:spring/elastic-job.xml"/>
+    <import resource="classpath:spring/dubbo-server.xml"/>
+    <import resource="classpath:spring/dubbo-consumer.xml"/>
 
     <context:component-scan base-package="org.seckill"/>
 </beans>

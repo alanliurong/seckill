@@ -8,10 +8,11 @@
        http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!--1：配置数据库相关参数 prpperties的属性 ：${url}-->
-    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <context:property-placeholder location="classpath:*.properties"/>
 
     <import resource="classpath:spring/spring-datasource.xml"/>
     <import resource="classpath:spring/spring-redis.xml"/>
+    <import resource="classpath:spring/elastic-job.xml"/>
 
     <context:component-scan base-package="org.seckill"/>
 </beans>

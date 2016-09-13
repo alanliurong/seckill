@@ -12,7 +12,7 @@
 
     <!--配置整合mybatis过程 -->
     <!--1：配置数据库相关参数 prpperties的属性 ：${url}-->
-    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!--<context:property-placeholder location="classpath:seckill.properties"/>-->
     <!--2：数据库连接池 -->
     <bean id="dateSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <!--配置连接池属性-->
