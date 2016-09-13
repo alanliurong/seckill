@@ -10,9 +10,12 @@
     <!-- 提供方应用信息，用于计算依赖关系 -->
     <dubbo:application name="seckill"/>
 
+    <dubbo:registry address="${dubbo.zookeeper.url}" check="false"/>
+
     <dubbo:reference interface="org.seckill.facade.SeckillFacade"
                      timeout="${dubbo.service.timeout}"
+                     version="${dubbo.service.version}"
                      id="seckillService"
                      retries="0"
-                     check="false" />
+                     check="false"/>
 </beans>

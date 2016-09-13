@@ -41,11 +41,11 @@ public class SeckillServiceImpl implements SeckillService {
     @Autowired
     private RedisDao            redisDao;
 
-    //md5颜值字符串，用于混淆
-    private final String        slat = "asdfghjkl20160709!@#$%^&*()_+";
+    //md5盐值字符串，用于混淆
+    private final String        salt = "asdfghjkl20160709!@#$%^&*()_+";
 
     private String getMD5(long seckillId) {
-        String base = seckillId + "/" + slat;
+        String base = seckillId + "/" + salt;
         String md5 = DigestUtils.md5DigestAsHex(base.getBytes());
         return md5;
     }
@@ -84,7 +84,6 @@ public class SeckillServiceImpl implements SeckillService {
         String md5 = getMD5(seckillId);//TODO md5
         return new Exposer(true, md5, seckillId);
     }
-
 
     /**
      * 使用注解控制事务方法的优点

@@ -14,9 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class DubboTest {
 
     @Autowired
-    private SeckillFacade seckillFacade;
+    private SeckillFacade seckillService;
 
     public void test(){
-        System.out.println("qweqwe"+seckillFacade.testdubbo());
+        System.out.println("qweqwe"+seckillService.testdubbo());
+    }
+
+    public static void main(String[] args) {
+        new DubboTest().test();
     }
 }
