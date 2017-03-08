@@ -77,4 +77,44 @@ public class RedisDao {
         }
         return null;
     }
+
+    public boolean acquireLock(String lock) {
+        Jedis jedis = jedisPool.getResource();
+        boolean success = false;
+        long value = System.currentTimeMillis() + 2 * 60 * 1000 + 1;
+        log.info("设置时间={}" + value);
+        long acquire = jedis.setnx(lock.getBytes(), String.valueOf(value).getBytes());
+
+        if (acquire == 1) {
+            success = true;
+        } else {
+            long oldValue = Long.valueOf(jedis.get(lock));
+            //如果设置的时间小于当前时间说明超时
+            if (oldValue < System.currentTimeMillis()) {
+                //获取lock的值，并设置新值
+                String getValue = jedis.getSet(lock, String.valueOf(value));
+
+                //如果oldValue和getValue相等说明锁没有被占用
+                if (Long.valueOf(getValue) == oldValue) {
+                    //获取锁成功
+                    success = true;
+                } else {
+                    //已经被获取
+                    success = false;
+                }
+            } else {
+                //未超时
+                success = false;
+            }
+        }
+        return success;
+    }
+
+    public void releaseLock(String lock) {
+        Jedis jedis = jedisPool.getResource();
+        long current = System.currentTimeMillis();
+        if (current < Long.valueOf(jedis.get(lock))) {
+            jedis.del(lock);
+        }
+    }
 }
