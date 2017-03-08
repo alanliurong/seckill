@@ -14,7 +14,7 @@
     <!--1：配置数据库相关参数 prpperties的属性 ：${url}-->
     <!--<context:property-placeholder location="classpath:seckill.properties"/>-->
     <!--2：数据库连接池 -->
-    <bean id="dateSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <!--配置连接池属性-->
         <property name="driverClass" value="${driverClassName}"/>
         <property name="jdbcUrl" value="${jdbc.url}"/>
@@ -59,7 +59,7 @@
     <!-- 配置事务管理器-->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <!-- 注入数据库连接池 -->
-        <property name="dataSource" ref="dateSource"/>
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 
     <!-- 配置基于注解的声明式事务 默认使用注解来管理事务行为-->
