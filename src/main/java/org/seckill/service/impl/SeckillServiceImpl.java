@@ -1,7 +1,3 @@
-/**
- * Bestpay.com.cn Inc.
- * Copyright (c) 2011-2016 All Rights Reserved.
- */
 package org.seckill.service.impl;
 
 import java.util.Date;
