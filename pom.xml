@@ -317,6 +317,12 @@
             <artifactId>netty</artifactId>
             <version>3.2.5.Final</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.18.2-GA</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>seckill</finalName>
